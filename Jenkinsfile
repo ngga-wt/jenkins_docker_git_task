@@ -43,7 +43,6 @@ pipeline {
             timeout(time: 10, unit: 'SECONDS') { 
             def myContainer = sh(script: "docker container ls | sed -rn \"s/.*($containerName)\$/\\1/p\"", returnStdout: true).trim()
  
-            echo "$myContainer :: $containerName"
             //if allready running trow exception and retry 2 times
             if (myContainer == containerName) {
                 error("Post action failed: container name $containerName shuld be stoped by know!") 
