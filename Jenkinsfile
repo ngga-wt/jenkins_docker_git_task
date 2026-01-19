@@ -30,7 +30,7 @@ pipeline {
           }
 
           // else run ubuntu_24_latest_v1 image to create custom container name from env
-          sh "docker run -itd --rm --name $containerName $imageName"
+          sh "docker run --rm --name $containerName $imageName"
         }
       }
     }
