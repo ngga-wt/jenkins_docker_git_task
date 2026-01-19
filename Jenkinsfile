@@ -35,4 +35,29 @@ pipeline {
       }
     }
   }
+  post {
+    success {
+      script {
+
+        retry(2) { 
+            timeout(time: 10, unit: 'SECONDS') { 
+            def myContainer = sh(script: "docker container ls | sed -rn \"s/.*($containerName)\$/\\1/p\"", returnStdout: true).trim()
+ 
+            //if allready running trow exception and retry 2 times
+            if (myContainer == containerName) {
+                error("Post action failed: container name $containerName shuld be stoped by know!") 
+            }
+
+            // else sleep 5 seconds
+            sh 'sleep 5' // This command would cause a timeout
+          }
+        }
+        def endAt = sh(script: 'date +"%Y-%m-%d %H:%M:%S"',returnStdout: true).trim()
+
+        // Print Environment variables to console
+        echo "START_AT: [$START_TIME] ,END_AT: [$endAt] ,BUILD_NUMBER: $BUILD_NUMBER ,JOB_NAME: $JOB_NAME AND USER_NAME: ${USER_NAME}"
+      }
+      echo 'Pipeline has finished with success.'
+    }
+  }
 }
