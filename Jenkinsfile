@@ -10,7 +10,13 @@ pipeline {
     stage('Build docker image') {
       steps {
         script {
+          // Print Environment variables to console
+          echo "START_AT: [$START_TIME] ,BUILD_NUMBER: $BUILD_NUMBER ,JOB_NAME: $JOB_NAME AND USER_NAME: ${USER_NAME}"
+
+          // build docker image with custom name called ubuntu_24_latest_v1
+          sh "docker build -t $imageName ."
         }
       }
     }
+  }
 }
