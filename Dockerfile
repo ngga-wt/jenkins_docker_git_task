@@ -3,6 +3,9 @@
 # currently 24.04 (Noble Numbat).
 FROM ubuntu:latest
 
+COPY ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 # Set the working directory inside the container
 WORKDIR /app
 
@@ -12,9 +15,9 @@ RUN apt-get update -y && apt-get upgrade -y && apt-get install -y \
     git \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
-    
+
 # Copy local files into the container
-# COPY . /app
+COPY . /app
 
 # Define the command to run when the container starts
-# CMD ["./your-application-executable"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

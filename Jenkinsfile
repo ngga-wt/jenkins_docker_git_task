@@ -48,7 +48,7 @@ pipeline {
                 error("Post action failed: container name $containerName shuld be stoped by know!") 
             }
 
-            // else sleep 5 seconds
+            // else sleep 5 seconds and exit block of code
             sh 'sleep 5' // This command would cause a timeout
           }
         }
