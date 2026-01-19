@@ -18,5 +18,21 @@ pipeline {
         }
       }
     }
+    stage('Run docker container') {
+      steps {
+        script {
+          // get container name $containerName if exisst
+          def myContainerName = sh(script: "docker ps -a | sed -rn \"s/.*($containerName)\$/\\1/p\"", returnStdout: true).trim()
+
+          // if allready exisst exit with failure
+          if (myContainerName == containerName) {
+              error('Run stage condition failed, exiting pipeline') 
+          }
+
+          // else run ubuntu_24_latest_v1 image to create custom container name from env
+          sh "docker run --rm --name $containerName $imageName"
+        }
+      }
+    }
   }
 }
