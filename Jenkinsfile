@@ -30,7 +30,7 @@ pipeline {
           }
 
           // else run ubuntu_24_latest_v1 image to create custom container name from env
-          sh "docker run --rm --name $containerName $imageName"
+          sh "docker run -itd --rm --name $containerName $imageName"
         }
       }
     }
@@ -43,6 +43,7 @@ pipeline {
             timeout(time: 10, unit: 'SECONDS') { 
             def myContainer = sh(script: "docker container ls | sed -rn \"s/.*($containerName)\$/\\1/p\"", returnStdout: true).trim()
  
+            echo "$myContainer :: $containerName"
             //if allready running trow exception and retry 2 times
             if (myContainer == containerName) {
                 error("Post action failed: container name $containerName shuld be stoped by know!") 
